@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync’d | Rhythm for Life & Performance</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            mint: '#1ED6B5',
+                            coral: '#FF8A5B',
+                            lavender: '#C8B7E2',
+                            peach: '#F4C1A1',
+                            dark: '#1A332F',     /* Darker, richer text */
+                            surface: '#F4FBF9',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow': '0 0 20px rgba(30, 214, 181, 0.4)',
+                    },
+                    borderRadius: {
+                        '4xl': '2.5rem',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* --- GLOBAL STYLES --- */
+        body { background-color: #F4FBF9; color: #1A332F; overflow-x: hidden; }
+        
+        /* Premium Noise Texture */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999; opacity: 0.04;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
+        }
+
+        /* Smooth Scroll Setup */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F4FBF9; }
+        ::-webkit-scrollbar-thumb { background: #1ED6B5; border-radius: 4px; }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-mint selection:text-white">
+
+    <div class="noise"></div>
+
+    <nav class="fixed w-full z-50 transition-all duration-300" 
+         x-data="{ scrolled: false, mobileOpen: false }" 
+         @scroll.window="scrolled = (window.pageYOffset > 20)"
+         :class="{ 'glass-panel shadow-sm py-4': scrolled, 'py-6 bg-transparent': !scrolled }">
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
+            <a href="#" class="text-2xl font-extrabold tracking-tight font-serif italic">
+                Sync<span class="text-brand-mint not-italic">’d</span>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="#how-it-works" class="text-sm font-semibold hover:text-brand-mint transition-colors">How it Works</a>
+                <a href="#phases" class="text-sm font-semibold hover:text-brand-mint transition-colors">The Cycle</a>
+                <a href="#dual-focus" class="text-sm font-semibold hover:text-brand-mint transition-colors">Life & Sport</a>
+                <a href="#cta" class="bg-brand-dark text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-brand-mint hover:scale-105 transition-all shadow-lg hover:shadow-brand-mint/50">
+                    Get the App
+                </a>
+            </div>
+
+            <button @click="mobileOpen = !mobileOpen" class="md:hidden text-brand-dark focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+
+        <div x-show="mobileOpen" x-transition class="md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-xl flex flex-col p-6 space-y-4">
+            <a href="#how-it-works" @click="mobileOpen = false" class="block text-lg font-bold">How it Works</a>
+            <a href="#phases" @click="mobileOpen = false" class="block text-lg font-bold">The Cycle</a>
+            <a href="#dual-focus" @click="mobileOpen = false" class="block text-lg font-bold">Life & Sport</a>
+            <a href="#cta" @click="mobileOpen = false" class="block text-center bg-brand-mint text-white py-3 rounded-lg font-bold">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[600px] h-[600px] bg-brand-mint rounded-full blur-[120px] opacity-20 -z-10 animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[400px] h-[400px] bg-brand-coral rounded-full blur-[100px] opacity-20 -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <span class="inline-block py-1 px-4 rounded-full bg-brand-mint/10 border border-brand-mint/20 text-brand-dark text-xs font-bold uppercase tracking-wider mb-6">
+                    For Every Woman • Every Goal
+                </span>
+                <h1 class="text-5xl lg:text-7xl font-serif font-medium leading-[1.1] mb-6 text-brand-dark">
+                    Master your rhythm. <br>
+                    <span class="italic text-brand-mint">Own your power.</span>
+                </h1>
+                <p class="text-xl text-gray-500 mb-8 leading-relaxed max-w-lg">
+                    Whether you're managing daily wellness or training for gold, Sync’d translates your cycle data into simple, actionable guidance.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#cta" class="bg-brand-mint text-brand-dark px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-dark hover:text-white transition-all shadow-xl hover:-translate-y-1 text-center">
+                        Start Your Journey
+                    </a>
+                    <div class="flex items-center gap-4 px-4 py-2">
+                        <div class="flex -space-x-3">
+                            <img class="w-10 h-10 rounded-full border-2 border-white" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64" alt="User">
+                            <img class="w-10 h-10 rounded-full border-2 border-white" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=64&h=64" alt="User">
+                        </div>
+                        <p class="text-sm font-bold text-gray-500">Join 10,000+ women</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative" data-aos="fade-left" data-aos-duration="1200">
+                <div class="relative z-10 rounded-4xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700 ease-out aspect-[4/5]">
+                    <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=800&q=80" 
+                         alt="Woman resting after workout" 
+                         class="w-full h-full object-cover">
+                    
+                    <div class="absolute bottom-8 left-8 right-8 glass-panel rounded-2xl p-5 animate-bounce" style="animation-duration: 4s;">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-brand-coral rounded-full flex items-center justify-center text-white font-serif italic text-xl">
+                                Day 21
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wide">Luteal Phase</p>
+                                <p class="font-bold text-brand-dark text-sm">Target: Steady Cardio & Magnesium-rich foods.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="how-it-works" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-serif font-medium text-brand-dark mb-4">Body literacy in 4 steps</h2>
+                <p class="text-lg text-gray-500">No medical jargon. Just simple, friendly guidance tailored to your life.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="group p-8 rounded-4xl bg-brand-surface border border-gray-100 hover:border-brand-mint/30 transition-all duration-300 hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-4xl font-serif font-bold text-brand-mint mb-4">01</div>
+                    <h3 class="text-xl font-bold mb-3">Check In</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Tell us about your lifestyle. Are you training for a marathon, or just trying to get through the work week?</p>
+                </div>
+                <div class="group p-8 rounded-4xl bg-brand-surface border border-gray-100 hover:border-brand-coral/30 transition-all duration-300 hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-4xl font-serif font-bold text-brand-coral mb-4">02</div>
+                    <h3 class="text-xl font-bold mb-3">Identify Phase</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">We calculate if you are in Menstrual, Follicular, Ovulation, or Luteal—even without daily logging.</p>
+                </div>
+                <div class="group p-8 rounded-4xl bg-brand-surface border border-gray-100 hover:border-brand-lavender/30 transition-all duration-300 hover:-translate-y-2" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-4xl font-serif font-bold text-brand-lavender mb-4">03</div>
+                    <h3 class="text-xl font-bold mb-3">Get Guidance</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Receive dual advice: Wellness tips for comfort, and Training tips for performance.</p>
+                </div>
+                <div class="group p-8 rounded-4xl bg-brand-surface border border-gray-100 hover:border-brand-peach/30 transition-all duration-300 hover:-translate-y-2" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-4xl font-serif font-bold text-brand-peach mb-4">04</div>
+                    <h3 class="text-xl font-bold mb-3">Support</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">We never create fear. If symptoms persist, we calmly suggest professional advice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="phases" class="py-24 bg-brand-surface overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-mint font-bold uppercase tracking-widest text-xs mb-2 block">The Monthly Rhythm</span>
+                <h2 class="text-4xl font-serif font-medium text-brand-dark">One Cycle. Dual Perspectives.</h2>
+                <p class="text-gray-500 mt-4">Switch between general wellness and athletic performance.</p>
+            </div>
+
+            <div x-data="{ activePhase: 'follicular' }" class="bg-white rounded-4xl shadow-glass border border-white p-2 lg:p-8">
+                <div class="grid lg:grid-cols-12 gap-8">
+                    
+                    <div class="lg:col-span-4 flex flex-col justify-center gap-3 p-4">
+                        <button @click="activePhase = 'menstrual'" 
+                                :class="activePhase === 'menstrual' ? 'bg-brand-dark text-white shadow-lg' : 'bg-transparent hover:bg-gray-50 text-gray-500'"
+                                class="p-4 rounded-2xl text-left transition-all duration-300 flex items-center justify-between group">
+                            <span class="font-bold text-lg">Menstrual</span>
+                            <span class="text-xs uppercase tracking-wide opacity-60">Reset</span>
+                        </button>
+                        <button @click="activePhase = 'follicular'" 
+                                :class="activePhase === 'follicular' ? 'bg-brand-dark text-white shadow-lg' : 'bg-transparent hover:bg-gray-50 text-gray-500'"
+                                class="p-4 rounded-2xl text-left transition-all duration-300 flex items-center justify-between group">
+                            <span class="font-bold text-lg">Follicular</span>
+                            <span class="text-xs uppercase tracking-wide opacity-60">Build</span>
+                        </button>
+                        <button @click="activePhase = 'ovulation'" 
+                                :class="activePhase === 'ovulation' ? 'bg-brand-dark text-white shadow-lg' : 'bg-transparent hover:bg-gray-50 text-gray-500'"
+                                class="p-4 rounded-2xl text-left transition-all duration-300 flex items-center justify-between group">
+                            <span class="font-bold text-lg">Ovulation</span>
+                            <span class="text-xs uppercase tracking-wide opacity-60">Peak</span>
+                        </button>
+                        <button @click="activePhase = 'luteal'" 
+                                :class="activePhase === 'luteal' ? 'bg-brand-dark text-white shadow-lg' : 'bg-transparent hover:bg-gray-50 text-gray-500'"
+                                class="p-4 rounded-2xl text-left transition-all duration-300 flex items-center justify-between group">
+                            <span class="font-bold text-lg">Luteal</span>
+                            <span class="text-xs uppercase tracking-wide opacity-60">Focus</span>
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-8 relative min-h-[500px] bg-brand-surface rounded-3xl p-8 lg:p-12 overflow-hidden flex items-center">
+                        
+                        <div x-show="activePhase === 'menstrual'" x-transition.opacity.duration.500ms class="w-full">
+                            <h3 class="text-4xl font-serif font-medium text-brand-coral mb-2">Winter Phase</h3>
+                            <p class="text-gray-500 mb-8">Hormones are low. It's time to turn inward.</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                                    <div class="text-2xl mb-2">🍵</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Daily Wellness</h4>
+                                    <p class="text-sm text-gray-500">Prioritize warmth. Soups, stews, and extra sleep. Allow yourself to move slowly.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-brand-mint/20">
+                                    <div class="text-2xl mb-2">🧘‍♀️</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Athlete Focus</h4>
+                                    <p class="text-sm text-gray-500">Active recovery. Yoga, walking, or light mobility work. Keep heart rate low to reduce inflammation.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div x-show="activePhase === 'follicular'" x-transition.opacity.duration.500ms class="w-full" style="display: none;">
+                            <h3 class="text-4xl font-serif font-medium text-brand-mint mb-2">Spring Phase</h3>
+                            <p class="text-gray-500 mb-8">Estrogen rises. Energy returns.</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                                    <div class="text-2xl mb-2">🥗</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Daily Wellness</h4>
+                                    <p class="text-sm text-gray-500">Fresh foods, socializing, and planning. You feel more creative and outgoing.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-brand-mint/20">
+                                    <div class="text-2xl mb-2">⚡</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Athlete Focus</h4>
+                                    <p class="text-sm text-gray-500">Build strength. High volume lifting, HIIT, and complex skill work. Your body recovers fast.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div x-show="activePhase === 'ovulation'" x-transition.opacity.duration.500ms class="w-full" style="display: none;">
+                            <h3 class="text-4xl font-serif font-medium text-brand-lavender mb-2">Summer Phase</h3>
+                            <p class="text-gray-500 mb-8">Peak estrogen. Maximum power.</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                                    <div class="text-2xl mb-2">🗣️</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Daily Wellness</h4>
+                                    <p class="text-sm text-gray-500">Confidence is high. Great for big presentations or dates. Hydrate well.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-brand-mint/20">
+                                    <div class="text-2xl mb-2">🏆</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Athlete Focus</h4>
+                                    <p class="text-sm text-gray-500">Go for PRs. Maximum strength. *Caution: ACL injury risk is higher due to joint laxity.*</p>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div x-show="activePhase === 'luteal'" x-transition.opacity.duration.500ms class="w-full" style="display: none;">
+                            <h3 class="text-4xl font-serif font-medium text-brand-peach mb-2">Autumn Phase</h3>
+                            <p class="text-gray-500 mb-8">Progesterone rises. Winding down.</p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                                    <div class="text-2xl mb-2">🍫</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Daily Wellness</h4>
+                                    <p class="text-sm text-gray-500">Organize and nest. Cravings increase—opt for dark chocolate and complex carbs.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-brand-mint/20">
+                                    <div class="text-2xl mb-2">🏃‍♀️</div>
+                                    <h4 class="font-bold text-brand-dark mb-2">Athlete Focus</h4>
+                                    <p class="text-sm text-gray-500">Steady state cardio. Body temperature rises, so endurance feels harder. Stay hydrated.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dual-focus" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                
+                <div class="relative">
+                     <div class="grid grid-cols-2 gap-4">
+                        <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=600&q=80" class="rounded-3xl shadow-lg mt-10" data-aos="fade-up">
+                        <img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=600&q=80" class="rounded-3xl shadow-lg" data-aos="fade-down">
+                    </div>
+                </div>
+
+                <div data-aos="fade-left">
+                    <h2 class="text-4xl font-serif font-medium text-brand-dark mb-6">Designed for biology,<br>not just aesthetics.</h2>
+                    <p class="text-lg text-gray-500 mb-8">
+                        Most apps assume you are the same person every day. Sync’d knows you aren't. Whether you are managing PMS or peaking for a competition, we help you work <em>with</em> your physiology.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex gap-5">
+                            <div class="w-12 h-12 rounded-full bg-brand-mint/10 flex items-center justify-center text-brand-mint font-bold shrink-0">01</div>
+                            <div>
+                                <h4 class="font-bold text-lg">For the Athlete</h4>
+                                <p class="text-sm text-gray-500">Prevents burnout and injury by flagging high-risk days and optimizing recovery windows.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-5">
+                            <div class="w-12 h-12 rounded-full bg-brand-coral/10 flex items-center justify-center text-brand-coral font-bold shrink-0">02</div>
+                            <div>
+                                <h4 class="font-bold text-lg">For the Everyday Woman</h4>
+                                <p class="text-sm text-gray-500">Reduces anxiety by explaining <em>why</em> you feel the way you do, and what simple foods can help.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-dark text-white text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-serif font-medium mb-8">Private. Secure. Supportive.</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                    <p class="text-2xl mb-2">🔒</p>
+                    <h3 class="font-bold mb-2">Local Data</h3>
+                    <p class="text-sm text-gray-400">Your data stays on your device. We prioritize privacy over cloud tracking.</p>
+                </div>
+                <div>
+                    <p class="text-2xl mb-2">🍛</p>
+                    <h3 class="font-bold mb-2">Culturally Fit</h3>
+                    <p class="text-sm text-gray-400">Nutrition tips tailored to Indian lifestyles and kitchens.</p>
+                </div>
+                <div>
+                    <p class="text-2xl mb-2">🤍</p>
+                    <h3 class="font-bold mb-2">No Diagnosis</h3>
+                    <p class="text-sm text-gray-400">We empower you with awareness, we do not replace your doctor.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="py-32 bg-brand-surface relative overflow-hidden text-center">
+        <div class="absolute top-0 left-0 w-full h-full opacity-30">
+             <div class="absolute top-10 left-10 w-64 h-64 bg-brand-mint rounded-full blur-[80px]"></div>
+             <div class="absolute bottom-10 right-10 w-64 h-64 bg-brand-coral rounded-full blur-[80px]"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-3xl mx-auto px-6" data-aos="zoom-in">
+            <h2 class="text-5xl lg:text-6xl font-serif font-medium text-brand-dark mb-8">Start listening to your body.</h2>
+            <p class="text-xl text-gray-500 mb-10">Join the movement of women redefining wellness and performance.</p>
+            <button class="bg-brand-coral text-white text-lg font-bold px-12 py-5 rounded-full shadow-lg hover:shadow-2xl hover:bg-[#ff7640] hover:-translate-y-1 transition-all">
+                Download Sync’d Now
+            </button>
+            <p class="mt-6 text-sm text-brand-muted opacity-60">Available on Android • iOS coming soon</p>
+        </div>
+    </section>
+
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-2xl font-serif font-bold text-brand-dark italic">Sync<span class="text-brand-mint not-italic">’d</span></div>
+            <div class="flex gap-8 text-sm text-gray-500 font-medium">
+                <a href="#" class="hover:text-brand-dark">Privacy Policy</a>
+                <a href="#" class="hover:text-brand-dark">Terms of Service</a>
+                <a href="#" class="hover:text-brand-dark">Support</a>
+            </div>
+            <div class="text-xs text-gray-400">
+                © 2025 Sync’d Wellness. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+    <script>
+        // Initialize Animate On Scroll
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
+
+        // Initialize Smooth Scroll (Lenis)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    </script>
+</body>
+</html>
